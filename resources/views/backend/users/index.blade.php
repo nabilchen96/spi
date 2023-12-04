@@ -16,6 +16,11 @@
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: #9e9e9e21 !important;
         }
+
+        th,
+        td {
+            white-space: nowrap !important;
+        }
     </style>
 @endpush
 @section('content')
@@ -105,6 +110,8 @@
     </div>
 @endsection
 @push('script')
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             getData()
@@ -115,6 +122,8 @@
                 "ordering": false,
                 ajax: '/data-user',
                 processing: true,
+                scrollX: true,
+                scrollCollapse: true,
                 'language': {
                     'loadingRecords': '&nbsp;',
                     'processing': 'Loading...'
@@ -125,7 +134,16 @@
                         }
                     },
                     {
-                        data: "name"
+                        // data: "judul_penelitian"
+                        render: function(data, type, row, meta) {
+                            return `<span style="
+                            width: 50px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.name}
+                            </span>`
+                        }
                     },
                     {
                         data: "email"

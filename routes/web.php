@@ -32,32 +32,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/update-user', 'App\Http\Controllers\UserController@update')->middleware('checkRole:Admin');
     Route::post('/delete-user', 'App\Http\Controllers\UserController@delete')->middleware('checkRole:Admin');
 
-    //JARINGAN
-    Route::get('/jaringan', 'App\Http\Controllers\JaringanController@index')->middleware('checkRole:Admin');
-    Route::get('/data-jaringan', 'App\Http\Controllers\JaringanController@data')->middleware('checkRole:Admin');
-    Route::post('/store-jaringan', 'App\Http\Controllers\JaringanController@store')->middleware('checkRole:Admin');
-    Route::post('/update-jaringan', 'App\Http\Controllers\JaringanController@update')->middleware('checkRole:Admin');
-    Route::post('/delete-jaringan', 'App\Http\Controllers\JaringanController@delete')->middleware('checkRole:Admin');
-
-    //SHIFT
-    Route::get('/shift', 'App\Http\Controllers\ShiftController@index')->middleware('checkRole:Admin');
-    Route::get('/data-shift', 'App\Http\Controllers\ShiftController@data')->middleware('checkRole:Admin');
-    Route::post('/store-shift', 'App\Http\Controllers\ShiftController@store')->middleware('checkRole:Admin');
-    Route::post('/update-shift', 'App\Http\Controllers\ShiftController@update')->middleware('checkRole:Admin');
-    Route::post('/delete-shift', 'App\Http\Controllers\ShiftController@delete')->middleware('checkRole:Admin');
-
-    //JADWAL
-    Route::get('/jadwal', 'App\Http\Controllers\JadwalController@index')->middleware('checkRole:Admin');
-    Route::get('/data-jadwal', 'App\Http\Controllers\JadwalController@data')->middleware('checkRole:Admin');
-    Route::post('/store-jadwal', 'App\Http\Controllers\JadwalController@store')->middleware('checkRole:Admin');
-    Route::post('/update-jadwal', 'App\Http\Controllers\JadwalController@update')->middleware('checkRole:Admin');
-    Route::post('/delete-jadwal', 'App\Http\Controllers\JadwalController@delete')->middleware('checkRole:Admin');
-
-    //ABSENSI
-    Route::get('/absensi', 'App\Http\Controllers\AbsensiController@index')->middleware('checkRole:Admin');
-    Route::get('/data-absensi', 'App\Http\Controllers\AbsensiController@data')->middleware('checkRole:Admin');
-    Route::get('/store-absensi', 'App\Http\Controllers\AbsensiController@store')->middleware('checkRole:Admin');
-    Route::get('/export-absensi', 'App\Http\Controllers\AbsensiController@excelExport')->middleware('checkRole:Admin');
 });
 
 //LOGOUT

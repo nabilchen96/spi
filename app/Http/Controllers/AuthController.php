@@ -27,35 +27,6 @@ class AuthController extends Controller
     public function loginProses(Request $request)
     {
 
-        //cek jaringan
-        // $response = Http::get('http://api.bigdatacloud.net/data/client-info');
-        // $data = $response->json();
-        // $ipString = $data['ipString'];
-        
-        $iplocal = [
-            '::1', '127.0.0.1'
-        ];
-
-        if(in_array($this->getClientIP(), $iplocal)){
-    
-            $ipString = file_get_contents("http://ipinfo.io/ip");
-
-            // dd($ipString);
-            
-        }else{
-
-            $ipString = $this->getClientIP();
-
-            // dd($ipString);
-        }
-
-        $jaringan = DB::table('jaringans')
-                    ->where('ip', $ipString)
-                    ->first();
-
-
-                    // dd($jaringan);
-
         $response_data = [
             'responCode' => 0,
             'respon'    => ''
@@ -71,15 +42,6 @@ class AuthController extends Controller
         if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
             //Login Success
             $role = Auth::user()->role;
-
-            //cek apakah admin?
-            if(Auth::user()->role != 'Admin' && $jaringan){
-                $this->storeAbsen();
-            }elseif(Auth::user()->role != 'Admin' && !$jaringan){
-                $response_data['respon'] = 'Anda Harus Menggunakan Jaringan Kantor Untuk Melakukan Absensi.
-                Silahkan Beralih ke Jaringan Kantor Terlebih Dahulu!';
-                return response()->json($response_data);
-            }
 
             $response_data = [
                 'responCode' => 1,

@@ -16,7 +16,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="login-form-02/css/style.css">
 
-    <title>Absensi Online</title>
+    <title>Sistem Informasi SPI</title>
   </head>
   <body>
   
@@ -28,8 +28,8 @@
       <div class="container">
         <div class="row align-items-center justify-content-center">
           <div class="col-md-7">
-            <h3>Login to <br><strong>Absensi Online</strong></h3>
-            <p>Login untuk melakukan absensi</p>
+            <h3>Login to <br><strong>Sistem Informasi SPI</strong></h3>
+            <p>Login untuk mengakses Aplikasi</p>
             
             <br>
 
