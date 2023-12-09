@@ -28,7 +28,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-xl-0">
-                    <h3 class="font-weight-bold">Data User</h3>
+                    <h3 class="font-weight-bold">Data Risiko</h3>
                 </div>
             </div>
         </div>
@@ -45,10 +45,11 @@
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>NIP</th>
-                                    <th>Role</th>
+                                    <th>Proses Bisnis</th>
+                                    <th>Identifikasi Risiko</th>
+                                    <th>Pengelola Risiko</th>
+                                    <th>Kategori Risiko</th>
+                                    <th>Uraian</th>
                                     <th width="5%"></th>
                                     <th width="5%"></th>
                                 </tr>
@@ -70,35 +71,44 @@
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input name="email" id="email" type="email" placeholder="email"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="email_alert"></span>
+                            <label>Proses Bisnis</label>
+                            <textarea placeholder="Proses Bisnis" required name="proses_bisnis" id="proses_bisnis" cols="30" rows="5" class="form-control form-control-sm"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Lengkap</label>
-                            <input name="name" id="name" type="text" placeholder="Nama Lengkap"
-                                class="form-control form-control-sm" required>
+                            <label>Identifikasi Risiko</label>
+                            <textarea placeholder="Identifikasi Risiko" required name="identifikasi_risiko" id="identifikasi_risiko" cols="30" rows="5" class="form-control form-control-sm"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">NIP</label>
-                            <input name="nip" id="nip" type="text" placeholder="NIP"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input name="password" id="password" type="password" placeholder="Password"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="password_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Role</label>
-                            <select name="role" class="form-control" id="role" required>
-                                <option value="Admin">Admin</option>
-                                <option value="Pegawai">Pegawai</option>
+                            <label>Pengelola Risiko</label>
+                            <select name="pengelola_risiko" id="pengelola_risiko" class="form-control form-control-sm" required>
+                                <?php $unit = DB::table('units')->get(); ?>
+                                @foreach ($unit as $item)
+                                    <option>{{ $item->unit }}</option>
+                                @endforeach
                             </select>
                         </div>
-
+                        <div class="form-group">
+                            <label>Kategori Risiko</label>
+                            <select name="kategori_risiko" id="kategori_risiko" class="form-control form-control-sm" required>
+                                <option>Risiko Hukum</option>
+                                <option>Risiko Bencana</option>
+                                <option>Risiko Kecurangan</option>
+                                <option>Risiko Kepatuhan</option>
+                                <option>Risiko Operasional</option>
+                                <option>Risiko Reputasi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Uraian</label>
+                            <select name="uraian" id="uraian" class="form-control form-control-sm" required>
+                                <option>Orang (Man)</option>
+                                <option>Dana (Money)</option>
+                                <option>Metode (Method)</option>
+                                <option>Bahan (Material)</option>
+                                <option>Mesin (Machine)</option>
+                                <option>Eksternal</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer p-3">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -120,7 +130,7 @@
         function getData() {
             $("#myTable").DataTable({
                 "ordering": false,
-                ajax: '/data-user',
+                ajax: '/data-risiko',
                 processing: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -134,33 +144,36 @@
                         }
                     },
                     {
-                        // data: "judul_penelitian"
                         render: function(data, type, row, meta) {
                             return `<span style="
-                            width: 50px !important;
+                            width: 200px !important;
                             white-space: normal;
                             display: inline-block !important;
                             ">
-                            ${row.name}
+                            ${row.proses_bisnis}
                             </span>`
                         }
                     },
                     {
-                        data: "email"
-                    },
-                    {
-                        data: "nip"
-                    },
-                    {
                         render: function(data, type, row, meta) {
-                            if (row.role == "Admin") {
-                                return `<span class="badge badge-success">${row.role}</span>`
-                            } else if (row.role == "Pegawai") {
-                                return `<span class="badge badge-primary">${row.role}</span>`
-                            }
+                            return `<span style="
+                            width: 200px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.identifikasi_risiko}
+                            </span>`
                         }
                     },
-
+                    {
+                        data: 'pengelola_risiko'
+                    },
+                    {
+                        data: 'kategori_risiko'
+                    },
+                    {
+                        data: 'uraian'
+                    },
                     {
                         render: function(data, type, row, meta) {
                             return `<a data-toggle="modal" data-target="#modal"
@@ -197,10 +210,11 @@
             if (recipient) {
                 var modal = $(this)
                 modal.find('#id').val(cokData[0].id)
-                modal.find('#email').val(cokData[0].email)
-                modal.find('#name').val(cokData[0].name)
-                modal.find('#role').val(cokData[0].role)
-                modal.find('#nip').val(cokData[0].nip)
+                modal.find('#proses_bisnis').val(cokData[0].proses_bisnis)
+                modal.find('#identifikasi_risiko').val(cokData[0].identifikasi_risiko)
+                modal.find('#pengelola_risiko').val(cokData[0].pengelola_risiko)
+                modal.find('#kategori_risiko').val(cokData[0].kategori_risiko)
+                modal.find('#uraian').val(cokData[0].uraian)
             }
         })
 
@@ -214,7 +228,7 @@
 
             axios({
                     method: 'post',
-                    url: formData.get('id') == '' ? '/store-user' : '/update-user',
+                    url: formData.get('id') == '' ? '/store-risiko' : '/update-risiko',
                     data: formData,
                 })
                 .then(function(res) {
@@ -260,7 +274,7 @@
             }).then((result) => {
 
                 if (result.value) {
-                    axios.post('/delete-user', {
+                    axios.post('/delete-risiko', {
                             id
                         })
                         .then((response) => {

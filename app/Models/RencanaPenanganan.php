@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Absensi extends Model
+class RencanaPenanganan extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
-
 }

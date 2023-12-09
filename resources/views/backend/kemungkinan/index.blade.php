@@ -20,6 +20,7 @@
         th,
         td {
             white-space: nowrap !important;
+            vertical-align: middle !important;
         }
     </style>
 @endpush
@@ -28,7 +29,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-xl-0">
-                    <h3 class="font-weight-bold">Data User</h3>
+                    <h3 class="font-weight-bold">Data Kemungkinan</h3>
                 </div>
             </div>
         </div>
@@ -44,11 +45,35 @@
                         <table id="myTable" class="table table-bordered table-striped" style="width: 100%;">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>NIP</th>
-                                    <th>Role</th>
+                                    <th rowspan="3" width="5%">No</th>
+                                    <th class="border-bottom">Pernyataan Risiko</th>
+                                    <th class="border-bottom text-center" colspan="8">Kriteria Kemungkinan Dalam 1 Tahun
+                                    </th>
+                                    <th rowspan="3">Level Kemungkinan</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2">Peristiwa</th>
+                                    <th colspan="4" class="border-bottom text-center">Persentasi Dalam 1 Tahun</th>
+                                    <th colspan="2" class="border-bottom text-center">Frekuensi Dalam 1 Tahun</th>
+                                    <th colspan="2" class="border-bottom text-center">Kejadian Toleransi Rendah</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    
+                                    <th>Kemungkinan</th>
+                                    <th>Total Aktivitas</th>
+                                    <th>Persentase</th>
+                                    <th>Angka</th>
+
+                                    <th>Frekuensi</th>
+                                    <th>Angka</th>
+
+                                    <th>Kejadian</th>
+                                    <th>Angka</th>
+
                                     <th width="5%"></th>
                                     <th width="5%"></th>
                                 </tr>
@@ -65,40 +90,55 @@
             <div class="modal-content">
                 <form id="form">
                     <div class="modal-header p-3">
-                        <h5 class="modal-title m-2" id="exampleModalLabel">User Form</h5>
+                        <h5 class="modal-title m-2" id="exampleModalLabel">Kemungkinan Form</h5>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input name="email" id="email" type="email" placeholder="email"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="email_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Lengkap</label>
-                            <input name="name" id="name" type="text" placeholder="Nama Lengkap"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">NIP</label>
-                            <input name="nip" id="nip" type="text" placeholder="NIP"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input name="password" id="password" type="password" placeholder="Password"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="password_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Role</label>
-                            <select name="role" class="form-control" id="role" required>
-                                <option value="Admin">Admin</option>
-                                <option value="Pegawai">Pegawai</option>
+                            <label>Peristiwa</label>
+                            <?php
+                            $peristiwa = DB::table('risikos as r')
+                                ->join('profil_risikos as pr', 'pr.id_risiko', '=', 'r.id')
+                                ->select('pr.id', 'r.identifikasi_risiko')
+                                ->get();
+                            ?>
+                            <select name="id_profil_risiko" id="id_profil_risiko" class="form-control form-control-sm"
+                                required>
+                                @foreach ($peristiwa as $item)
+                                    <option value="{{ $item->id }}">{{ $item->identifikasi_risiko }}</option>
+                                @endforeach
                             </select>
                         </div>
-
+                        <div class="form-group">
+                            <label>Jumlah Kemungkinan</label>
+                            <input type="number" placeholder="Jumlah Kemungkinan" class="form-control form-control-sm"
+                                required name="jumlah_kemungkinan" id="jumlah_kemungkinan">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Aktivitas</label>
+                            <input type="number" placeholder="Total Aktivitas" class="form-control form-control-sm"
+                                required name="total_aktivitas" id="total_aktivitas">
+                        </div>
+                        <div class="form-group">
+                            <label>Frekuensi</label>
+                            <select name="frekuensi" id="frekuensi" class="form-control form-control-sm" required>
+                                <option>2 kali dalam 1 tahun</option>
+                                <option>2 sd 5 kali dalam 1 tahun</option>
+                                <option>6 sd 9 kali dalam 1 tahun</option>
+                                <option>10 sd 12 kali dalam 1 tahun</option>
+                                <option>Lebih dari 12 kali dalam 1 tahun</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kejadian</label>
+                            <select name="kejadian" id="kejadian" class="form-control form-control-sm" required>
+                                <option>1 kejadian dalam 1 tahun terakhir</option>
+                                <option>1 kejadian dalam 2 tahun terakhir</option>
+                                <option>1 kejadian dalam 3 tahun terakhir</option>
+                                <option>1 kejadian dalam 4 tahun terakhir</option>
+                                <option>1 kejadian dalam 5 tahun terakhir</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer p-3">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -120,7 +160,7 @@
         function getData() {
             $("#myTable").DataTable({
                 "ordering": false,
-                ajax: '/data-user',
+                ajax: '/data-kemungkinan',
                 processing: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -134,33 +174,89 @@
                         }
                     },
                     {
-                        // data: "judul_penelitian"
                         render: function(data, type, row, meta) {
                             return `<span style="
-                            width: 50px !important;
+                            width: 200px !important;
                             white-space: normal;
                             display: inline-block !important;
                             ">
-                            ${row.name}
+                            ${row.identifikasi_risiko}
                             </span>`
                         }
                     },
                     {
-                        data: "email"
+                        data: "jumlah_kemungkinan"
                     },
                     {
-                        data: "nip"
+                        data: "total_aktivitas"
                     },
                     {
                         render: function(data, type, row, meta) {
-                            if (row.role == "Admin") {
-                                return `<span class="badge badge-success">${row.role}</span>`
-                            } else if (row.role == "Pegawai") {
-                                return `<span class="badge badge-primary">${row.role}</span>`
+                            return (row.jumlah_kemungkinan / row.total_aktivitas).toFixed(2) + "%"
+                        }
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            if ((row.jumlah_kemungkinan / row.total_aktivitas) <= 0.05) {
+                                return "1";
+                            } else if ((row.jumlah_kemungkinan / row.total_aktivitas) <= 0.1) {
+                                return "2";
+                            } else if ((row.jumlah_kemungkinan / row.total_aktivitas) <= 0.2) {
+                                return "3";
+                            } else if ((row.jumlah_kemungkinan / row.total_aktivitas) <= 0.5) {
+                                return "4";
+                            } else if ((row.jumlah_kemungkinan / row.total_aktivitas) <= 1) {
+                                return "5";
+                            } else if ((row.jumlah_kemungkinan / row.total_aktivitas) === "") {
+                                return "0";
                             }
                         }
                     },
-
+                    {
+                        data: 'frekuensi'
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            if (row.frekuensi <= 0) {
+                                return "0";
+                            } else if (row.frekuensi == "< 2 kali dalam 1 tahun") {
+                                return "1";
+                            } else if (row.frekuensi == "2 sd 5 kali dalam 1 tahun") {
+                                return "2";
+                            } else if (row.frekuensi == "6 sd 9 kali dalam 1 tahun") {
+                                return "3";
+                            } else if (row.frekuensi == "10 sd 12 kali dalam 1 tahun") {
+                                return "4";
+                            } else if (row.frekuensi == "Lebih dari 12 kali dalam 1 tahun") {
+                                return "5";
+                            } else {
+                                return "0";
+                            }
+                        }
+                    },
+                    {
+                        data: "kejadian"
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            if (row.kejadian <= 0) {
+                                return "0";
+                            } else if (row.kejadian === "1 kejadian dalam 1 tahun terakhir") {
+                                return "5";
+                            } else if (row.kejadian === "1 kejadian dalam 2 tahun terakhir") {
+                                return "4";
+                            } else if (row.kejadian === "1 kejadian dalam 3 tahun terakhir") {
+                                return "3";
+                            } else if (row.kejadian === "1 kejadian dalam 4 tahun terakhir") {
+                                return "2";
+                            } else if (row.kejadian === "1 kejadian dalam 5 tahun terakhir") {
+                                return "1";
+                            }
+                        }
+                    },
+                    {
+                        data: "level_kemungkinan"
+                    },
                     {
                         render: function(data, type, row, meta) {
                             return `<a data-toggle="modal" data-target="#modal"
@@ -197,10 +293,11 @@
             if (recipient) {
                 var modal = $(this)
                 modal.find('#id').val(cokData[0].id)
-                modal.find('#email').val(cokData[0].email)
-                modal.find('#name').val(cokData[0].name)
-                modal.find('#role').val(cokData[0].role)
-                modal.find('#nip').val(cokData[0].nip)
+                modal.find('#id_profil_risiko').val(cokData[0].id_profil_risiko)
+                modal.find('#jumlah_kemungkinan').val(cokData[0].jumlah_kemungkinan)
+                modal.find('#total_aktivitas').val(cokData[0].total_aktivitas)
+                modal.find('#frekuensi').val(cokData[0].frekuensi)
+                modal.find('#kejadian').val(cokData[0].kejadian)
             }
         })
 
@@ -214,7 +311,7 @@
 
             axios({
                     method: 'post',
-                    url: formData.get('id') == '' ? '/store-user' : '/update-user',
+                    url: formData.get('id') == '' ? '/store-kemungkinan' : '/update-kemungkinan',
                     data: formData,
                 })
                 .then(function(res) {
@@ -260,7 +357,7 @@
             }).then((result) => {
 
                 if (result.value) {
-                    axios.post('/delete-user', {
+                    axios.post('/delete-kemungkinan', {
                             id
                         })
                         .then((response) => {

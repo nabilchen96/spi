@@ -20,6 +20,7 @@
         th,
         td {
             white-space: nowrap !important;
+            vertical-align: middle !important;
         }
     </style>
 @endpush
@@ -28,7 +29,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-xl-0">
-                    <h3 class="font-weight-bold">Data User</h3>
+                    <h3 class="font-weight-bold">Data Penanganan</h3>
                 </div>
             </div>
         </div>
@@ -44,13 +45,32 @@
                         <table id="myTable" class="table table-bordered table-striped" style="width: 100%;">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>NIP</th>
-                                    <th>Role</th>
-                                    <th width="5%"></th>
-                                    <th width="5%"></th>
+                                    <th rowspan="2" width="5%">No</th>
+                                    <th rowspan="2" class="border-bottom">Peristiwa</th>
+                                    <th rowspan="2" class="border-bottom">Sistem Pengendalian yang Ada</th>
+                                    <th colspan="5" class="border-bottom text-center">Rencana Penanganan Risiko</th>
+                                    <th colspan="4" class="border-bottom text-center">Level Risiko Harapan Setelah Mitigasi</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th>Opsi Penanganan Risiko</th>
+                                    <th>
+                                        Uraian Penanganan Risiko 
+                                        {{-- <br> <span class="text-danger">
+                                            Diisi dengan penanganan  berbeda dengan 
+                                            penanganan yang sudah ada --}}
+                                        </span>
+                                    </th>
+                                    <th>Target Output</th>
+                                    <th>Jadwal Implementasi</th>
+                                    <th>Pengelola Risiko</th>
+                                    <th>Kemungkinan</th>
+                                    <th>Dampak</th>
+                                    <th>Keputusan Mitigasi</th>
+                                    <th>Risiko</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -65,40 +85,57 @@
             <div class="modal-content">
                 <form id="form">
                     <div class="modal-header p-3">
-                        <h5 class="modal-title m-2" id="exampleModalLabel">User Form</h5>
+                        <h5 class="modal-title m-2" id="exampleModalLabel">Rencana Penanganan Form</h5>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input name="email" id="email" type="email" placeholder="email"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="email_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Lengkap</label>
-                            <input name="name" id="name" type="text" placeholder="Nama Lengkap"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">NIP</label>
-                            <input name="nip" id="nip" type="text" placeholder="NIP"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input name="password" id="password" type="password" placeholder="Password"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="password_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Role</label>
-                            <select name="role" class="form-control" id="role" required>
-                                <option value="Admin">Admin</option>
-                                <option value="Pegawai">Pegawai</option>
+                            <label>Peristiwa</label>
+                            <?php
+                            $peristiwa = DB::table('risikos as r')
+                                ->join('profil_risikos as pr', 'pr.id_risiko', '=', 'r.id')
+                                ->select('pr.id', 'r.identifikasi_risiko')
+                                ->get();
+                            ?>
+                            <select name="id_profil_risiko" id="id_profil_risiko" class="form-control form-control-sm"
+                                required>
+                                @foreach ($peristiwa as $item)
+                                    <option value="{{ $item->id }}">{{ $item->identifikasi_risiko }}</option>
+                                @endforeach
                             </select>
                         </div>
-
+                        <div class="form-group">
+                            <label>Opsi Penanganan</label>
+                            <select name="opsi_penanganan" id="opsi_penanganan" class="form-control form-control-sm" required>
+                                <option>Mengurangi Kemungkinan</option>
+                                <option>Mengurangi Dampak</option>
+                                <option>Mengurangi Kemungkinan dan Dampak</option>
+                                <option>Berbagi Risiko</option>
+                                <option>Menghindari Risiko</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Penanganan Lain</label>
+                            <textarea placeholder="Penanganan Lain" name="penanganan_lain" id="penanganan_lain" class="form-control form-control-sm" cols="30" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Jumlah Kegiatan</label>
+                            <input type="number" class="form-control form-control-sm" required name="jumlah_kegiatan" id="jumlah_kegiatan" placeholder="Jumlah Kegiatan">
+                        </div>
+                        <div class="form-group">
+                            <label>Jadwal</label>
+                            <input type="date" class="form-control form-control-sm" required name="jadwal" id="jadwal">
+                        </div>
+                        <div class="form-group">
+                            <label>Level Harapan Kemungkinan</label>
+                            <input type="number" class="form-control form-control-sm" required 
+                            name="level_kemungkinan" id="level_kemungkinan" placeholder="Jumlah Kemungkinan">
+                        </div>
+                        <div class="form-group">
+                            <label>Level Harapan Dampak</label>
+                            <input type="number" class="form-control form-control-sm" required 
+                            name="level_dampak" id="level_dampak"  placeholder="Jumlah Dampak">
+                        </div>
                     </div>
                     <div class="modal-footer p-3">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -120,7 +157,7 @@
         function getData() {
             $("#myTable").DataTable({
                 "ordering": false,
-                ajax: '/data-user',
+                ajax: '/data-rencana-penanganan',
                 processing: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -134,33 +171,66 @@
                         }
                     },
                     {
-                        // data: "judul_penelitian"
                         render: function(data, type, row, meta) {
                             return `<span style="
-                            width: 50px !important;
+                            width: 200px !important;
                             white-space: normal;
                             display: inline-block !important;
                             ">
-                            ${row.name}
+                            ${row.identifikasi_risiko}
                             </span>`
                         }
                     },
                     {
-                        data: "email"
-                    },
-                    {
-                        data: "nip"
+                        data: "sistem_pengendalian"
                     },
                     {
                         render: function(data, type, row, meta) {
-                            if (row.role == "Admin") {
-                                return `<span class="badge badge-success">${row.role}</span>`
-                            } else if (row.role == "Pegawai") {
-                                return `<span class="badge badge-primary">${row.role}</span>`
-                            }
+                            return `<span style="
+                            width: 200px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.opsi_penanganan}
+                            </span>`
                         }
                     },
-
+                    {
+                        render: function(data, type, row, meta) {
+                            return `<span style="
+                            width: 250px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.penanganan_lain}
+                            </span>`
+                        }
+                    },
+                    {
+                        data: "jumlah_kegiatan"
+                    },
+                    {
+                        data: "jadwal"
+                    },
+                    {
+                        data: "level_kemungkinan"
+                    },
+                    {
+                        data: "level_dampak"
+                    },
+                    {
+                        data: "nilai_risiko"
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return `YA`
+                        }
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return row.level_kemungkinan + row.level_dampak
+                        }
+                    },
                     {
                         render: function(data, type, row, meta) {
                             return `<a data-toggle="modal" data-target="#modal"
@@ -197,10 +267,13 @@
             if (recipient) {
                 var modal = $(this)
                 modal.find('#id').val(cokData[0].id)
-                modal.find('#email').val(cokData[0].email)
-                modal.find('#name').val(cokData[0].name)
-                modal.find('#role').val(cokData[0].role)
-                modal.find('#nip').val(cokData[0].nip)
+                modal.find('#opsi_penanganan').val(cokData[0].opsi_penanganan)
+                modal.find('#penanganan_lain').val(cokData[0].penanganan_lain)
+                modal.find('#jumlah_kegiatan').val(cokData[0].jumlah_kegiatan)
+                modal.find('#jadwal').val(cokData[0].jadwal)
+                modal.find('#level_kemungkinan').val(cokData[0].level_kemungkinan)
+                modal.find('#level_dampak').val(cokData[0].level_dampak)
+
             }
         })
 
@@ -214,7 +287,7 @@
 
             axios({
                     method: 'post',
-                    url: formData.get('id') == '' ? '/store-user' : '/update-user',
+                    url: formData.get('id') == '' ? '/store-rencana-penanganan' : '/update-rencana-penanganan',
                     data: formData,
                 })
                 .then(function(res) {
@@ -260,7 +333,7 @@
             }).then((result) => {
 
                 if (result.value) {
-                    axios.post('/delete-user', {
+                    axios.post('/delete-rencana-penanganan', {
                             id
                         })
                         .then((response) => {

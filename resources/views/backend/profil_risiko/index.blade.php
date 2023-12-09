@@ -20,6 +20,7 @@
         th,
         td {
             white-space: nowrap !important;
+            vertical-align: middle !important;
         }
     </style>
 @endpush
@@ -28,7 +29,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-xl-0">
-                    <h3 class="font-weight-bold">Data User</h3>
+                    <h3 class="font-weight-bold">Data Profil Risiko</h3>
                 </div>
             </div>
         </div>
@@ -44,13 +45,17 @@
                         <table id="myTable" class="table table-bordered table-striped" style="width: 100%;">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>NIP</th>
-                                    <th>Role</th>
-                                    <th width="5%"></th>
-                                    <th width="5%"></th>
+                                    <th width="5%" rowspan="2">No</th>
+                                    <th colspan="4" class="border-bottom text-center">Pernyataan Risiko</th>
+                                    <th rowspan="2" class="border-bottom" >Sistem Pengendalian</th>
+                                    <th rowspan="2" class="border-bottom" width="5%"></th>
+                                    <th rowspan="2" class="border-bottom" width="5%"></th>
+                                </tr>
+                                <tr>
+                                    <th>Peristiwa</th>
+                                    <th>Penyebab</th>
+                                    <th>Dampak</th>
+                                    <th>Kategori Risiko</th>
                                 </tr>
                             </thead>
                         </table>
@@ -65,40 +70,31 @@
             <div class="modal-content">
                 <form id="form">
                     <div class="modal-header p-3">
-                        <h5 class="modal-title m-2" id="exampleModalLabel">User Form</h5>
+                        <h5 class="modal-title m-2" id="exampleModalLabel">Profil Risiko Form</h5>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input name="email" id="email" type="email" placeholder="email"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="email_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Lengkap</label>
-                            <input name="name" id="name" type="text" placeholder="Nama Lengkap"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">NIP</label>
-                            <input name="nip" id="nip" type="text" placeholder="NIP"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input name="password" id="password" type="password" placeholder="Password"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="password_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Role</label>
-                            <select name="role" class="form-control" id="role" required>
-                                <option value="Admin">Admin</option>
-                                <option value="Pegawai">Pegawai</option>
+                            <label>Peristiwa</label>
+                            <?php $peristiwa = DB::table('risikos')->get(); ?>
+                            <select name="id_risiko" id="id_risiko" class="form-control form-control-sm" required>
+                                @foreach ($peristiwa as $item)
+                                    <option value="{{ $item->id }}">{{ $item->identifikasi_risiko }}</option>
+                                @endforeach
                             </select>
                         </div>
-
+                        <div class="form-group">
+                            <label>Penyebab</label>
+                            <textarea placeholder="Penyebab" required name="penyebab" id="penyebab" cols="30" rows="5" class="form-control form-control-sm"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Dampak</label>
+                            <textarea placeholder="Dampak" required name="dampak" id="dampak" cols="30" rows="5" class="form-control form-control-sm"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Sistem Pengendalian</label>
+                            <textarea placeholder="Sistem Pengendalian" required name="sistem_pengendalian" id="sistem_pengendalian" cols="30" rows="5" class="form-control form-control-sm"></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer p-3">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -120,7 +116,7 @@
         function getData() {
             $("#myTable").DataTable({
                 "ordering": false,
-                ajax: '/data-user',
+                ajax: '/data-profil-risk',
                 processing: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -134,33 +130,52 @@
                         }
                     },
                     {
-                        // data: "judul_penelitian"
                         render: function(data, type, row, meta) {
                             return `<span style="
-                            width: 50px !important;
+                            width: 200px !important;
                             white-space: normal;
                             display: inline-block !important;
                             ">
-                            ${row.name}
+                            ${row.identifikasi_risiko}
                             </span>`
                         }
                     },
                     {
-                        data: "email"
-                    },
-                    {
-                        data: "nip"
+                        render: function(data, type, row, meta) {
+                            return `<span style="
+                            width: 200px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.penyebab}
+                            </span>`
+                        }
                     },
                     {
                         render: function(data, type, row, meta) {
-                            if (row.role == "Admin") {
-                                return `<span class="badge badge-success">${row.role}</span>`
-                            } else if (row.role == "Pegawai") {
-                                return `<span class="badge badge-primary">${row.role}</span>`
-                            }
+                            return `<span style="
+                            width: 230px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.dampak}
+                            </span>`
                         }
                     },
-
+                    {
+                        data: 'kategori_risiko'
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return `<span style="
+                            width: 200px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.sistem_pengendalian}
+                            </span>`
+                        }
+                    },
                     {
                         render: function(data, type, row, meta) {
                             return `<a data-toggle="modal" data-target="#modal"
@@ -197,10 +212,10 @@
             if (recipient) {
                 var modal = $(this)
                 modal.find('#id').val(cokData[0].id)
-                modal.find('#email').val(cokData[0].email)
-                modal.find('#name').val(cokData[0].name)
-                modal.find('#role').val(cokData[0].role)
-                modal.find('#nip').val(cokData[0].nip)
+                modal.find('#id_risiko').val(cokData[0].id_risiko)
+                modal.find('#penyebab').val(cokData[0].penyebab)
+                modal.find('#dampak').val(cokData[0].dampak)
+                modal.find('#sistem_pengendalian').val(cokData[0].sistem_pengendalian)
             }
         })
 
@@ -214,7 +229,7 @@
 
             axios({
                     method: 'post',
-                    url: formData.get('id') == '' ? '/store-user' : '/update-user',
+                    url: formData.get('id') == '' ? '/store-profil-risk' : '/update-profil-risk',
                     data: formData,
                 })
                 .then(function(res) {
@@ -260,7 +275,7 @@
             }).then((result) => {
 
                 if (result.value) {
-                    axios.post('/delete-user', {
+                    axios.post('/delete-profil-risk', {
                             id
                         })
                         .then((response) => {

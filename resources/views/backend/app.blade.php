@@ -68,7 +68,7 @@
             line-height: 1.5 !important;
         }
 
-        .navbar{
+        .navbar {
             box-shadow: none !important;
         }
     </style>
@@ -118,8 +118,8 @@
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" 
-            style="box-shadow: 0px 5px 21px -5px #CDD1E1;">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+                style="box-shadow: 0px 5px 21px -5px #CDD1E1;">
                 <a class="navbar-brand brand-logo mr-5" style="font-size: 16px; margin-left: 20px;"
                     href="{{ url('/') }}">
                     <h3><b>E-SPI</b></h3>
@@ -231,8 +231,12 @@
     <script src="{{ asset('skydash/js/Chart.roundedBarCharts.js') }}"></script>
     <script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
-    <!-- End custom js for this page-->
-    @stack('script')
+    <!-- script tambahan  -->
+
+        <!-- End custom js for this page
+        -->
+        @stack('script')
+
 </body>
 
 </html>
