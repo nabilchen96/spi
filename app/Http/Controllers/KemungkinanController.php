@@ -24,8 +24,13 @@ class KemungkinanController extends Controller
             ->select(
                 'r.identifikasi_risiko',
                 'k.*'
-            )
-            ->get();
+            );
+
+        if (Auth::user()->role == 'Admin') {
+            $data = $data->get();
+        } else {
+            $data = $data->where('k.id_user', Auth::user()->id)->get();
+        }
 
         return response()->json(['data' => $data]);
     }
@@ -108,8 +113,9 @@ class KemungkinanController extends Controller
                     'jumlah_kemungkinan' => $request->jumlah_kemungkinan,
                     'total_aktivitas' => $request->total_aktivitas,
                     'frekuensi' => $request->frekuensi,
-                    'kejadian' => $request->kejadian, 
-                    'level_kemungkinan' => $persen + $frekuensi + $toleransi
+                    'kejadian' => $request->kejadian,
+                    'level_kemungkinan' => $persen + $frekuensi + $toleransi,
+                    'id_user' => Auth::id()
                 ]
             );
 
@@ -193,7 +199,7 @@ class KemungkinanController extends Controller
                 'jumlah_kemungkinan' => $request->jumlah_kemungkinan,
                 'total_aktivitas' => $request->total_aktivitas,
                 'frekuensi' => $request->frekuensi,
-                'kejadian' => $request->kejadian, 
+                'kejadian' => $request->kejadian,
                 'level_kemungkinan' => $persen + $frekuensi + $toleransi
             ]);
 

@@ -25,8 +25,13 @@ class RencanaPenangananController extends Controller
                 'r.identifikasi_risiko',
                 'pr.sistem_pengendalian',
                 'rp.*'
-            )
-            ->get();
+            );
+
+            if(Auth::user()->role == 'Admin'){
+                $data = $data->get();
+            }else{
+                $data = $data->where('r.id_user', Auth::id())->get();
+            }
 
         return response()->json(['data' => $data]);
     }
@@ -47,7 +52,8 @@ class RencanaPenangananController extends Controller
                 'jadwal' => $request->jadwal,
                 'level_kemungkinan' => $request->level_kemungkinan,
                 'level_dampak' => $request->level_dampak,
-                'nilai_risiko' => $request->level_kemungkinan + $request->level_dampak
+                'nilai_risiko' => $request->level_kemungkinan + $request->level_dampak,
+                'id_user'   => Auth::id()
             ]
         );
 

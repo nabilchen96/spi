@@ -25,8 +25,13 @@ class DampakController extends Controller
             ->select(
                 'r.identifikasi_risiko',
                 'k.*'
-            )
-            ->get();
+            );
+
+            if(Auth::user()->role == 'Admin'){
+                $data = $data->get();
+            }else{
+                $data = $data->where('k.id_user', Auth::id())->get();
+            }
 
         return response()->json(['data' => $data]);
     }
@@ -110,7 +115,8 @@ class DampakController extends Controller
                 'dampak_hukum' => $request->dampak_hukum,
                 'sasaran_kinerja' => $request->sasaran_kinerja,
                 'keselamatan_transportasi' => $request->keselamatan_transportasi,
-                'kriteria_dampak' => $bn + $pr + $dh + $sk + $kt
+                'kriteria_dampak' => $bn + $pr + $dh + $sk + $kt,
+                'id_user'   => Auth::id()
             ]);
 
         $data = [

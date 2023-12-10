@@ -20,8 +20,13 @@ class BerkasReviewController extends Controller
     {
 
         $data = DB::table('berkas')
-            ->whereIn('status', ['Tahap Review'])
-            ->get();
+            ->whereIn('status', ['Tahap Review']);
+
+            if(Auth::user()->role == 'Admin'){
+                $data = $data->get();
+            }else{
+                $data = $data->where('id_user', Auth::id())->get();
+            }
 
         return response()->json(['data' => $data]);
     }

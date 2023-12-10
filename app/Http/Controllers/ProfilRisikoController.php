@@ -24,8 +24,13 @@ class ProfilRisikoController extends Controller
                     'pr.*', 
                     'r.identifikasi_risiko', 
                     'r.kategori_risiko'
-                )
-                ->get();
+                );
+
+                if(Auth::user()->role == 'Admin'){
+                    $data = $data->get();
+                }else{
+                    $data = $data->where('pr.id_user', Auth::user()->id)->get();
+                }
 
         return response()->json(['data' => $data]);
     }
@@ -49,7 +54,8 @@ class ProfilRisikoController extends Controller
                 'id_risiko' => $request->id_risiko,
                 'penyebab' => $request->penyebab,
                 'dampak' => $request->dampak,
-                'sistem_pengendalian' => $request->sistem_pengendalian
+                'sistem_pengendalian' => $request->sistem_pengendalian,
+                'id_user' => Auth::id()
             ]);
 
             $data = [

@@ -95,8 +95,13 @@
                                              ->select(
                                                 'pr.id', 
                                                 'r.identifikasi_risiko'
-                                             )
-                                             ->get(); 
+                                            );
+
+                                if(Auth::user()->role == 'Admin'){
+                                    $peristiwa = $peristiwa->get();
+                                }else{
+                                    $peristiwa = $peristiwa->where('r.id_user', Auth::id())->get();
+                                }
                             ?>
                             <select name="id_profil_risiko" id="id_profil_risiko" class="form-control form-control-sm" required>
                                 @foreach ($peristiwa as $item)

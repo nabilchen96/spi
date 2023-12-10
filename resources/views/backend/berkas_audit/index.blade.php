@@ -185,10 +185,16 @@
                     },
                     {
                         render: function(data, type, row, meta) {
-                            return `<a data-toggle="modal" data-target="#acc"
+                            if('{{Auth::user()->role}}' == 'Admin'){
+                                return `<a data-toggle="modal" data-target="#acc"
                                     data-bs-id=` + (row.id) + ` href="javascript:void(0)">
                                     <i style="font-size: 1.5rem;" class="text-info bi bi-check-circle-fill"></i>
                                 </a>`
+                            }else{
+                                return `<a href="#">
+                                    <i style="font-size: 1.5rem;" class="text-secondary bi bi-check-circle-fill"></i>
+                                </a>`
+                            }
                         }
                     },
                     {

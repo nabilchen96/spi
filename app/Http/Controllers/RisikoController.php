@@ -18,7 +18,13 @@ class RisikoController extends Controller
     public function data()
     {
 
-        $data = DB::table('risikos')->get();
+        $data = DB::table('risikos');
+
+        if(Auth::user()->role == 'Admin'){
+            $data = $data->get();
+        }else{
+            $data = $data->where('id_user', Auth::user()->id)->get();
+        }
 
         return response()->json(['data' => $data]);
     }
@@ -45,7 +51,8 @@ class RisikoController extends Controller
                 'identifikasi_risiko' => $request->identifikasi_risiko,
                 'pengelola_risiko' => $request->pengelola_risiko,
                 'kategori_risiko' => $request->kategori_risiko,
-                'uraian' => $request->uraian
+                'uraian' => $request->uraian,
+                'id_user' => Auth::id()
             ]);
 
             $data = [
@@ -77,7 +84,7 @@ class RisikoController extends Controller
                 'identifikasi_risiko' => $request->identifikasi_risiko,
                 'pengelola_risiko' => $request->pengelola_risiko,
                 'kategori_risiko' => $request->kategori_risiko,
-                'uraian' => $request->uraian
+                'uraian' => $request->uraian,
             ]);
 
             $data = [

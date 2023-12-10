@@ -76,7 +76,15 @@
                         <input type="hidden" name="id" id="id">
                         <div class="form-group">
                             <label>Peristiwa</label>
-                            <?php $peristiwa = DB::table('risikos')->get(); ?>
+                            <?php 
+                                $peristiwa = DB::table('risikos');
+
+                                if(Auth::user()->role == 'Admin'){
+                                    $peristiwa = $peristiwa->get();
+                                }else{
+                                    $peristiwa = $peristiwa->where('id_user', Auth::id())->get();
+                                }
+                            ?>
                             <select name="id_risiko" id="id_risiko" class="form-control form-control-sm" required>
                                 @foreach ($peristiwa as $item)
                                     <option value="{{ $item->id }}">{{ $item->identifikasi_risiko }}</option>

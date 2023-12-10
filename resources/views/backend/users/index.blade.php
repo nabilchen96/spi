@@ -134,16 +134,7 @@
                         }
                     },
                     {
-                        // data: "judul_penelitian"
-                        render: function(data, type, row, meta) {
-                            return `<span style="
-                            width: 50px !important;
-                            white-space: normal;
-                            display: inline-block !important;
-                            ">
-                            ${row.name}
-                            </span>`
-                        }
+                        data: "name"
                     },
                     {
                         data: "email"

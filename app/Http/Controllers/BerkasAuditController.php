@@ -20,8 +20,13 @@ class BerkasAuditController extends Controller
     {
 
         $data = DB::table('berkas')
-            ->whereIn('status', ['Belum Proses', 'Berkas Ditolak'])
-            ->get();
+            ->whereIn('status', ['Belum Proses', 'Berkas Ditolak']);
+
+            if(Auth::user()->role == 'Admin'){
+                $data = $data->get();
+            }else{
+                $data = $data->where('id_user', Auth::id())->get();
+            }
 
         return response()->json(['data' => $data]);
     }

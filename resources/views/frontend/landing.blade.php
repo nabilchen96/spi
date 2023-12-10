@@ -155,12 +155,12 @@
             <div class="row">
                 <div class="col-lg-6 mb-5">
                     <h2 class="font-weight-semibold text-left mb-2 mt-4" data-aos="zoom-in" data-aos-delay="100">
-                        E-SPI Poltekbang Palembang
+                        E-SPI Politeknik <br> Penerbangan Palembang
                         {{-- Aplikasi Penerimaan Calon Taruna Baru --}}
                     </h2>
 
                     <p class="text-left mb-5">
-                        Sistem Informasi Satuan Pengawas Internal Politeknik
+                        Sistem Informasi Satuan Pengawasan Internal <br> Politeknik
                         Penerbangan Palembang
                     </p>
                     <div class="d-flex justify-content-start">

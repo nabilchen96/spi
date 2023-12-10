@@ -26,8 +26,13 @@ class NilaiEfektivitasController extends Controller
                     'pr.penyebab', 
                     'pr.dampak',
                     'r.identifikasi_risiko'
-                )
-                ->get();
+                );
+
+                if(Auth::user()->role == 'Admin'){
+                    $data = $data->get();
+                }else{
+                    $data = $data->where('ne.id_user', Auth::user()->id)->get();
+                }
 
         return response()->json(['data' => $data]);
     }
@@ -56,7 +61,8 @@ class NilaiEfektivitasController extends Controller
                     'nilai_a'   => $request->nilai_a,
                     'nilai_b'   => $request->nilai_b,
                     'nilai_c'   => $request->nilai_c, 
-                    'jumlah'    => $request->nilai_a + $request->nilai_b + $request->nilai_c
+                    'jumlah'    => $request->nilai_a + $request->nilai_b + $request->nilai_c,
+                    'id_user'   => Auth::id()
                 ]
             );
 

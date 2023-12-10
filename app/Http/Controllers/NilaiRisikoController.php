@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Auth;
 
 class NilaiRisikoController extends Controller
 {
@@ -32,8 +33,13 @@ class NilaiRisikoController extends Controller
                 'd.kriteria_dampak',
                 'r.kategori_risiko'
                 // DB::raw('COALESCE(matriks.nilai_matrik, (SELECT nilai_matrik FROM matriks WHERE id = 1)) AS nilai_matrik') // Ganti '1' dengan id yang sesuai
-            )
-            ->get();
+            );
+
+            if(Auth::user()->role == 'Admin'){
+                $data = $data->get();
+            }else{
+                $data = $data->where('r.id_user', Auth::id())->get();
+            }
 
         $matrik = DB::table('matriks')->get();
 
