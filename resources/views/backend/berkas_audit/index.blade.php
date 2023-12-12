@@ -28,7 +28,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-xl-0">
-                    <h3 class="font-weight-bold">Data User</h3>
+                    <h3 class="font-weight-bold">Data Berkas Audit</h3>
                 </div>
             </div>
         </div>
@@ -45,10 +45,13 @@
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>NIP</th>
-                                    <th>Role</th>
+                                    <th>Nama Berkas</th>
+                                    <th>Status</th>
+                                    <th>Keterangan</th>
+                                    <th>Tanggal Upload</th>
+                                    <th>Tanggal Update</th>
+                                    <th width="5%"></th>
+                                    <th width="5%"></th>
                                     <th width="5%"></th>
                                     <th width="5%"></th>
                                 </tr>
@@ -65,40 +68,49 @@
             <div class="modal-content">
                 <form id="form">
                     <div class="modal-header p-3">
-                        <h5 class="modal-title m-2" id="exampleModalLabel">User Form</h5>
+                        <h5 class="modal-title m-2" id="exampleModalLabel">Berkas Form</h5>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input name="email" id="email" type="email" placeholder="email"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="email_alert"></span>
+                            <label>Nama Berkas</label>
+                            <input type="text" name="nama_berkas" id="nama_berkas" class="form-control form-control-sm"
+                                placeholder="Nama Berkas" required>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Lengkap</label>
-                            <input name="name" id="name" type="text" placeholder="Nama Lengkap"
-                                class="form-control form-control-sm" required>
+                            <label>File Berkas</label>
+                            <input type="file" name="file_berkas" id="file_berkas" class="form-control form-control-sm"
+                                placeholder="File Berkas" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer p-3">
+                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                        <button id="tombol_kirim" class="btn btn-primary btn-sm">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="acc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="formacc">
+                    <div class="modal-header p-3">
+                        <h5 class="modal-title m-2" id="exampleModalLabel">Acc Berkas</h5>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="id">
+                        <div class="form-group">
+                            <label>Keterangan</label>
+                            <textarea name="keterangan" id="keterangan" cols="30" rows="5" class="form-control form-control-sm"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">NIP</label>
-                            <input name="nip" id="nip" type="text" placeholder="NIP"
-                                class="form-control form-control-sm" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input name="password" id="password" type="password" placeholder="Password"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="password_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Role</label>
-                            <select name="role" class="form-control" id="role" required>
-                                <option value="Admin">Admin</option>
-                                <option value="Pegawai">Pegawai</option>
+                            <label>Status</label>
+                            <select name="status" id="status" class="form-control form-control-sm">
+                                <option>Tahap Review</option>
+                                <option>Berkas Ditolak</option>
                             </select>
                         </div>
-
                     </div>
                     <div class="modal-footer p-3">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -120,7 +132,7 @@
         function getData() {
             $("#myTable").DataTable({
                 "ordering": false,
-                ajax: '/data-user',
+                ajax: '/data-berkas-audit',
                 processing: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -134,24 +146,57 @@
                         }
                     },
                     {
-                        data: "name"
-                    },
-                    {
-                        data: "email"
-                    },
-                    {
-                        data: "nip"
+                        data: "nama_berkas"
                     },
                     {
                         render: function(data, type, row, meta) {
-                            if (row.role == "Admin") {
-                                return `<span class="badge badge-success">${row.role}</span>`
-                            } else if (row.role == "Pegawai") {
-                                return `<span class="badge badge-primary">${row.role}</span>`
+                           if(row.status == 'Belum Proses'){
+                                return `<span class="badge bg-warning text-white">Belum Proses</span>` 
+                           }else if(row.status == 'Tahap Review'){
+                                return `<span class="badge bg-success text-white">Tahap Review</span>`
+                           }else{
+                                return `<span class="badge bg-danger text-white">Berkas Ditolak</span>`
+                           }
+                        }
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return `<span style="
+                            width: 250px !important;
+                            white-space: normal;
+                            display: inline-block !important;
+                            ">
+                            ${row.keterangan}
+                            </span>`
+                        }
+                    },
+                    {
+                        data: 'created_at'
+                    },
+                    {
+                        data: 'updated_at'
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return `<a href="/file_berkas/${row.file_berkas}">
+                                    <i style="font-size: 1.5rem;" class="text-info bi bi-file-earmark-arrow-down-fill"></i>
+                                </a>`
+                        }
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            if('{{Auth::user()->role}}' == 'Admin'){
+                                return `<a data-toggle="modal" data-target="#acc"
+                                    data-bs-id=` + (row.id) + ` href="javascript:void(0)">
+                                    <i style="font-size: 1.5rem;" class="text-info bi bi-check-circle-fill"></i>
+                                </a>`
+                            }else{
+                                return `<a href="#">
+                                    <i style="font-size: 1.5rem;" class="text-secondary bi bi-check-circle-fill"></i>
+                                </a>`
                             }
                         }
                     },
-
                     {
                         render: function(data, type, row, meta) {
                             return `<a data-toggle="modal" data-target="#modal"
@@ -188,10 +233,7 @@
             if (recipient) {
                 var modal = $(this)
                 modal.find('#id').val(cokData[0].id)
-                modal.find('#email').val(cokData[0].email)
-                modal.find('#name').val(cokData[0].name)
-                modal.find('#role').val(cokData[0].role)
-                modal.find('#nip').val(cokData[0].nip)
+                modal.find('#nama_berkas').val(cokData[0].nama_berkas)
             }
         })
 
@@ -205,7 +247,70 @@
 
             axios({
                     method: 'post',
-                    url: formData.get('id') == '' ? '/store-user' : '/update-user',
+                    url: formData.get('id') == '' ? '/store-berkas-audit' : '/update-berkas-audit',
+                    data: formData,
+                })
+                .then(function(res) {
+                    //handle success         
+                    if (res.data.responCode == 1) {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses',
+                            text: res.data.respon,
+                            timer: 3000,
+                            showConfirmButton: false
+                        })
+
+                        $("#modal").modal("hide");
+                        $('#myTable').DataTable().clear().destroy();
+                        getData()
+
+                    } else {
+
+                        console.log('terjadi error');
+                    }
+
+                    document.getElementById("tombol_kirim").disabled = false;
+                })
+                .catch(function(res) {
+                    document.getElementById("tombol_kirim").disabled = false;
+                    //handle error
+                    console.log(res);
+                });
+        }
+
+
+        $('#acc').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('bs-id') // Extract info from data-* attributes
+            var cok = $("#myTable").DataTable().rows().data().toArray()
+
+            let cokData = cok.filter((dt) => {
+                return dt.id == recipient;
+            })
+
+            document.getElementById("formacc").reset();
+            document.getElementById('id').value = ''
+            $('.error').empty();
+
+            if (recipient) {
+                var modal = $(this)
+                modal.find('#id').val(cokData[0].id)
+            }
+        })
+
+        formacc.onsubmit = (e) => {
+
+            let formData = new FormData(formacc);
+
+            e.preventDefault();
+
+            document.getElementById("tombol_kirim").disabled = true;
+
+            axios({
+                    method: 'post',
+                    url: '/response-berkas-audit',
                     data: formData,
                 })
                 .then(function(res) {
@@ -251,7 +356,7 @@
             }).then((result) => {
 
                 if (result.value) {
-                    axios.post('/delete-user', {
+                    axios.post('/delete-berkas-audit', {
                             id
                         })
                         .then((response) => {

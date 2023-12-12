@@ -28,7 +28,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8 mb-xl-0">
-                    <h3 class="font-weight-bold">Data User</h3>
+                    <h3 class="font-weight-bold">Data Jadwal</h3>
                 </div>
             </div>
         </div>
@@ -45,10 +45,10 @@
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th width="5%">No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>NIP</th>
-                                    <th>Role</th>
+                                    <th>Tahun</th>
+                                    <th>Mulai</th>
+                                    <th>Selesai</th>
+                                    <th>Status</th>
                                     <th width="5%"></th>
                                     <th width="5%"></th>
                                 </tr>
@@ -65,37 +65,30 @@
             <div class="modal-content">
                 <form id="form">
                     <div class="modal-header p-3">
-                        <h5 class="modal-title m-2" id="exampleModalLabel">User Form</h5>
+                        <h5 class="modal-title m-2" id="exampleModalLabel">Jadwal Form</h5>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="id">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input name="email" id="email" type="email" placeholder="email"
-                                class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="email_alert"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Lengkap</label>
-                            <input name="name" id="name" type="text" placeholder="Nama Lengkap"
+                            <label>Tahun</label>
+                            <input name="tahun" id="tahun" type="string" placeholder="Tahun"
                                 class="form-control form-control-sm" required>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">NIP</label>
-                            <input name="nip" id="nip" type="text" placeholder="NIP"
+                            <label>Tanggal Mulai</label>
+                            <input name="tanggal_mulai" id="tanggal_mulai" type="date"
                                 class="form-control form-control-sm" required>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input name="password" id="password" type="password" placeholder="Password"
+                            <label>Tanggal Selesai</label>
+                            <input name="tanggal_selesai" id="tanggal_selesai" type="date" placeholder="Tanggal Selesai"
                                 class="form-control form-control-sm" required>
-                            <span class="text-danger error" style="font-size: 12px;" id="password_alert"></span>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Role</label>
-                            <select name="role" class="form-control" id="role" required>
-                                <option value="Admin">Admin</option>
-                                <option value="Pegawai">Pegawai</option>
+                            <label>Status</label>
+                            <select name="status" class="form-control" id="status" required>
+                                <option>Aktif</option>
+                                <option>Tidak Aktif</option>
                             </select>
                         </div>
 
@@ -120,7 +113,7 @@
         function getData() {
             $("#myTable").DataTable({
                 "ordering": false,
-                ajax: '/data-user',
+                ajax: '/data-jadwal',
                 processing: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -134,20 +127,20 @@
                         }
                     },
                     {
-                        data: "name"
+                        data: "tahun"
                     },
                     {
-                        data: "email"
+                        data: "tanggal_mulai"
                     },
                     {
-                        data: "nip"
+                        data: "tanggal_selesai"
                     },
                     {
                         render: function(data, type, row, meta) {
-                            if (row.role == "Admin") {
-                                return `<span class="badge badge-success">${row.role}</span>`
-                            } else if (row.role == "Pegawai") {
-                                return `<span class="badge badge-primary">${row.role}</span>`
+                            if (row.status == "Aktif") {
+                                return `<span class="badge badge-success">${row.status}</span>`
+                            } else if (row.status == "Tidak Aktif") {
+                                return `<span class="badge badge-primary">${row.status}</span>`
                             }
                         }
                     },
@@ -188,10 +181,10 @@
             if (recipient) {
                 var modal = $(this)
                 modal.find('#id').val(cokData[0].id)
-                modal.find('#email').val(cokData[0].email)
-                modal.find('#name').val(cokData[0].name)
-                modal.find('#role').val(cokData[0].role)
-                modal.find('#nip').val(cokData[0].nip)
+                modal.find('#tahun').val(cokData[0].tahun)
+                modal.find('#tanggal_mulai').val(cokData[0].tanggal_mulai)
+                modal.find('#tanggal_selesai').val(cokData[0].tanggal_selesai)
+                modal.find('#status').val(cokData[0].status)
             }
         })
 
@@ -205,7 +198,7 @@
 
             axios({
                     method: 'post',
-                    url: formData.get('id') == '' ? '/store-user' : '/update-user',
+                    url: formData.get('id') == '' ? '/store-jadwal' : '/update-jadwal',
                     data: formData,
                 })
                 .then(function(res) {
@@ -251,7 +244,7 @@
             }).then((result) => {
 
                 if (result.value) {
-                    axios.post('/delete-user', {
+                    axios.post('/delete-jadwal', {
                             id
                         })
                         .then((response) => {
