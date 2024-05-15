@@ -219,7 +219,7 @@
                                             {{ $item->keterangan }}
                                         </td>
                                         <td width="10%">
-                                            <a href="/dokumen_spi/"{{ $item->file_dokumen }}>
+                                            <a href="/dokumen_spi/{{ $item->file_dokumen }}">
                                                 Download
                                             </a>
                                         </td>
